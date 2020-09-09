@@ -1,0 +1,42 @@
+Google Cloud Fundamentals: Getting Started with GKE
+1  Objectives
+	In this lab, you learn how to perform the following tasks:
+	* Provision a Kubernetes cluster using Kubernetes Engine.
+	* Deploy and manage Docker containers using kubectl.
+2 Steps
+	i)Start a Kubernetes Engine cluster
+For convenience, place the zone that Qwiklabs assigned you to into an environment variable called MY_ZONE. At the Cloud Shell prompt, type this partial command:
+a) export MY_ZONE=
+followed by the zone that Qwiklabs assigned to you, your complete command will look like this:export MY_ZONE=us-central1-a
+
+Start a Kubernetes cluster managed by Kubernetes Engine. Name the cluster webfrontend and configure it to run 2 nodes: gcloud container clusters b)create webfrontend --zone $MY_ZONE --num-nodes 2
+(this may take a several minutes to create a cluster)
+check your installed version of Kubernetes using the kubectl version command
+c) kubectl version
+To view running nodes use this command 
+d)gcloud container clusters list
+
+	ii)Run and deploy a container
+launch a single instance of nginx container 
+a)kubectl create deploy nginx --image=nginx:1.17.10
+Note: If you see any deprecation warning about future version you can simply ignore it for now and can proceed further.
+
+View the pod running nginx container
+b)kubectl get pods
+Expose the nginx container to the internet
+c)kubectl expose deployment nginx --port 80 --type LoadBalancer
+View the new service
+d)kubectl get services
+You can use the displayed external IP address to test and contact the nginx container remotely.
+It may take a few seconds before the External-IP field is populated for your service. This is normal. Just re-run the kubectl get services command every few seconds until the field is populated.
+e)Open a new web browser tab and paste your cluster's external IP address into the address bar. The default home page of the Nginx browser is displayed.
+
+Scale up the number of pods running on your service
+d)kubectl scale deployment nginx --replicas 3
+Confirm that kubernetes has updated the number pods
+e)kubectl get pods
+Confirm that your external IP address has not changed
+f)kubectl get services
+g)Return to the web browser tab in which you viewed your cluster's external IP address. Refresh the page to confirm that the nginx web server is still responding
+
+Congratulations.
